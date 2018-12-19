@@ -1,40 +1,46 @@
-/*
- * Simple code to detect magnet and increase counter 
- */
+#define NUMBEROFMAGNETS 3           //Number of magnets on fan 
+int dPin = 2;   
+volatile unsigned long count = 0;
 
-#include <PinChangeInt.h>                                           //Adding the required library
-//int dOp;
-//int aOp;
-
-int dPin = 2;                                                       //Didital pin 2 connected to Hall Sensor Digital pin
-//int aPin = A0;
-
-int count = 0;
-
+//=====================>> SETUP <<======================================
 void setup() {
 //  Serial.begin(9600);
   pinMode(dPin, INPUT);
-//  pinMode(aPin, INPUT);
-  attachInterrupt(digitalPinToInterrupt(dPin), raiseCount, FALLING); //Attaching the interrupts
-  count = 0;                                                         //Initializing count
+  count = 0;                        //Initializing count
 }
-
+//=====================>> SETUP ENDS <<======================================
+//=====================>> LOOP <<======================================
 void loop() {
-//  dOp = digitalRead(dPin);
-//  aOp = analogRead(aPin);
-//  Serial.print(count);
-//  Serial.print(" .) \t");
-//  Serial.print(dOp);
-//  Serial.print("\t");
-//  Serial.println(aOp);
+  attachInterrupt(digitalPinToInterrupt(dPin), raiseCount, FALLING); //Attaching the interrupts
+  volatile unsigned long interruptStartTime = millis()/1000;                   //Time (in second) when we started our interrupts
+  /*
+   * Some other Sensor codes here
+   */
+   
+  long rpm = giveRPM(interruptStartTime);
+  detachInterrupt(digitalPinToInterrupt(dPin));             //Detaching the interrupt
+  count = 0;                                                //Reseting count to 0
   
-
 }
+//=====================>> LOOP ENDS <<=================================
+
 /*
- * This function is called every time hall sensor detects magnets.
- * Called by attachInterrupts
+ * Called by Hardware Interrupt at digital pin
  * Function: Increase global variable count by 1
  */
 int raiseCount(){                             
-  count += 1;
+  count++;
 }
+
+
+/*
+ * RPM = number of rotations/time taken * 60
+ *     = (count2)/(currentTime - time1) * 60 .   (count is count per magnet)
+ */
+long giveRPM(volatile unsigned long interruptStartTime){
+  volatile unsigned long timeTaken = ((millis()/1000) - interruptStartTime); 
+  volatile unsigned long noOfRotations = count/NUMBEROFMAGNETS;    //Detection of "numberOfMagnets" of counts equals 1 rotation in that time
+  float rpm = (noOfRotations/timeTaken)*60;                       //Maths to get RPM
+  return rpm;
+}
+
