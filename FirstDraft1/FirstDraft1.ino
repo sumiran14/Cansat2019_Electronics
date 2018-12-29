@@ -5,6 +5,7 @@
 #include "packet.h"         //PACKET:
 #include <Adafruit_Sensor.h>//BMP   : 
 #include <Adafruit_BMP280.h>//BMP   :
+#include <stdint.h>
 //==========================>>PACKET<<===============================================
 packet p1(1);               //PACKET: This creates a variable packet
 //==========================>>RTC<<===============================================
@@ -116,7 +117,6 @@ void giveRPM(volatile unsigned long interruptStartTime){
 void setupGPS(){
   ss.begin(GPSBaud);
 }
-
 void getGPS(){
   getGPSAltitude();
   getGPSTime();
@@ -125,20 +125,40 @@ void getGPS(){
   getGPSNumSatelite();
 }
 /* Below 5 functions has to be completed from coe that worked*/
-void getGPSNumSatelite(){
-  
+int getGPSNumSatelite(){
+  if (gps.satellites.isValid()) {
+    gps.satellites.value();
+  } else {
+  return 0;
+  }
 }
-void getGPSLatitute(){
-  
+
+double getGPSLatitute(){
+  if (gps.location.isValid()) {
+    gps.location.lat();
+  } else {
+  return 0;
+  }
 }
-void getGPSLongitude(){
-  
+
+double getGPSLongitude(){
+  if (gps.location.isValid()) {
+    gps.location.lng();
+  } else {
+  return 0;
+  }
 }
-void getGPSTime(){
-  
+
+int32_t getGPSTime(){
+  return gps.time.value();
 }
-void getGPSAltitude(){
-  
+
+float getGPSAltitude(){
+  if (gps.altitude.isValid()) {
+    return gps.altitude.meters();
+  } else {
+  return 0;
+  }
 }
 //===========================================>> GPS : code finishes  <<============================================= 
 
