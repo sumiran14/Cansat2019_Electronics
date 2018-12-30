@@ -13,6 +13,7 @@ packet::packet(const int team_id){
 	this->gps_time;
 	this->gps_lattitude;
 	this->gps_longitude;
+	this->gps_altitude;
 	this->gps_sats;
 	this->pitch;
 	this->roll;
@@ -33,6 +34,7 @@ String packet::toString(){
 		this->gps_time + "," +
 		String(this->gps_lattitude) + "," +
 		String(this->gps_longitude) + "," +
+		String(this->gps_altitude) + "," +
 		String(this->gps_sats) + "," +
 		String(this->pitch) + "," +
 		String(this->roll) + "," +
