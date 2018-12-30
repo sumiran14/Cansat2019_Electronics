@@ -118,16 +118,16 @@ void setupGPS(){
   ss.begin(GPSBaud);
 }
 void getGPS(){
-  getGPSAltitude();
-  getGPSTime();
-  getGPSLongitude();
-  getGPSLatitute();
-  getGPSNumSatelite();
+  p1.gps_altitude = getGPSAltitude();
+  p1.gps_time = getGPSTime();
+  p1.gps_longitude = getGPSLongitude();
+  p1.gps_lattitude = getGPSLatitute();
+  p1.gps_sats = getGPSNumSatelite();
 }
-/* Below 5 functions has to be completed from coe that worked*/
+
 int getGPSNumSatelite(){
   if (gps.satellites.isValid()) {
-    gps.satellites.value();
+    return gps.satellites.value();
   } else {
   return 0;
   }
@@ -135,7 +135,7 @@ int getGPSNumSatelite(){
 
 double getGPSLatitute(){
   if (gps.location.isValid()) {
-    gps.location.lat();
+    return gps.location.lat();
   } else {
   return 0;
   }
@@ -143,7 +143,7 @@ double getGPSLatitute(){
 
 double getGPSLongitude(){
   if (gps.location.isValid()) {
-    gps.location.lng();
+    return gps.location.lng();
   } else {
   return 0;
   }
