@@ -31,7 +31,7 @@ String packet::toString(){
 		String(this->pressure) + "," +
 		String(this->temperature) + "," +
 		String(this->voltage) + "," +
-		this->gps_time + "," +
+		String(this->gps_time) + "," +
 		String(this->gps_lattitude) + "," +
 		String(this->gps_longitude) + "," +
 		String(this->gps_altitude) + "," +
