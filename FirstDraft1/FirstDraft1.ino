@@ -30,17 +30,24 @@ SoftwareSerial ss(4, 3);        //GPS : Rx(D4) -> Tx of GPS   and   Tx(D3) -> Rx
 Adafruit_BMP280 bmp;            //BMP : Creating BMP object
 float currentAltitute = 0;      //BMP : To save altitute of height
 
+//==============================>>VOLTAGE<<===============================================
+int voltageDigital = 0;                         
+int voltagePin=A0;
+float voltageAnalog = 0;
+volatile float voltageBattery = 0;
+
 //===========================================>>SETUP and LOOP <<============================================================================= 
 void setup() {
   Serial.begin(9600);       //For debugging purposes
   delay(3000);              // wait for console opening
 
   //Calling setting Functions
-  setupRTC();               //RTC : Setup
-  setupXBee();              //Xbee: Setup
-  setupHall();              //HALL: Setup
-  setupGPS();               //GPS : Setup
-  setupBMP();               //BMP : Setup
+  setupRTC();               //RTC    : Setup
+  setupXBee();              //Xbee   : Setup
+  setupHall();              //HALL   : Setup
+  setupGPS();               //GPS    : Setup
+  setupBMP();               //BMP    : Setup
+  setupVoltage();           //VOLTAGE: Setup
 }
 void loop() {
   getMissionTime();         //RTC : Saving the mission time from RTC in packet p1
@@ -186,4 +193,16 @@ void getBMPReadings(){
 }
 //===========================================>> BMP : code finishes  <<============================================= 
 
+//===========================================>> VOLTAGE Functions: Setting up and Initializing values <<============================================= 
+void setupVoltage(){
+  pinMode(voltagePin,INPUT);
+}
+
+void getBatteryVoltage(){
+  voltageDigital=analogRead(voltagePin);
+  voltageAnalog=(5.0/1023.0)*voltageDigital;
+  voltageBattery=(3.0)*voltageAnalog;
+  p1.voltage = voltageBattery;
+}
+//===========================================>> VOLTAGE : code finishes  <<============================================= 
 
