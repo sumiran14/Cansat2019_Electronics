@@ -2,16 +2,16 @@
 //Orient Z axis downwards for usage
 //Roll along Xaxis 
 // Pitch along Y axis
-#include <Wire.h>
+#include <Wire.h>                   //Including Library for I2C
 
-int16_t accelX, accelY, accelZ;
-float gForceX, gForceY, gForceZ;
+int16_t accelX, accelY, accelZ;     //Since int in SAMD is 4 bytes, therefore using int16_t to make it SAMD compatible
+float gForceX, gForceY, gForceZ;    //stores acceleration in 3 directions in terms ofg
 
-float angleY=0,angleZ=0 ;
+float angleY=0,angleZ=0 ;          
 long lastloop=0;
 
-int16_t gyroX, gyroY, gyroZ;
-float rotX, rotY, rotZ;
+int16_t gyroX, gyroY, gyroZ;      //Since int in SAMD is 4 bytes, therefore using int16_t to make it SAMD compatible    
+float rotX, rotY, rotZ;           //This will be storing rotational speed or velocity around those axis
 
 float roll=0,pitch=0;
 
@@ -19,9 +19,9 @@ float gForceXNormalised=0,gForceYNormalised=0,gForceZNormalised=0;
 float Xacc[10],Yacc[10],Zacc[10];
 float Xgyr[10],Ygyr[10],Zgyr[10];
 
-#define MPU9250ADDRESS 0b1101001        // I2C address: 0x69
-#define Serial SerialUSB
-#define Wire Wire1
+#define MPU9250ADDRESS 0b1101001        // I2C address: 0x69 when AD0 pin is high
+#define Serial SerialUSB                // for SAMD
+#define Wire Wire1                      // for SAMD custom Wire
 
 TwoWire Wire1(&sercom2, 4, 3); //SDA = 4, SCL = 3
 
@@ -43,6 +43,12 @@ void loop() {
   printData();
 
 }
+
+/*
+ * Seting up power register and waking up from sleep
+ * Setting Aceelerometer to read full range +/-2g = 19.6 m/s2
+ * Setting up Gyro to read max full range  +/-250 deg/s
+ */
 
 void setupMPU(){
   Wire.beginTransmission(MPU9250ADDRESS); //This is the I2C address of the MPU (b1101000/b1101001 for AC0 low/high datasheet sec. 9.2)
@@ -136,10 +142,4 @@ Serial.println(pitch);
 Serial.println("");
 delay(10);
 //Serial.println(micros());
-
-
-
-  
-  
-
 }
