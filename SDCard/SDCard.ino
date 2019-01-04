@@ -7,6 +7,9 @@
  ** CS - pin 10
 
 */
+#define LOG_EVENTS	//enable this to log mission events to SD card
+#define SER_DEBUG		//enable this to get debug info in serial monitor
+
 #include <SPI.h>
 #include <SD.h>
 
@@ -27,55 +30,77 @@ String data[] = {
 };
 
 void setup() {
-  // Open SerialUSB communications and wait for port to open:
-  SerialUSB.begin(115200);
-  while (!SerialUSB); // wait for SerialUSB port to connect. Needed for native USB port only
+	#ifdef SER_DEBUG
+		// Open SerialUSB communications and wait for port to open:
+		SerialUSB.begin(115200);
+		while (!SerialUSB); // wait for SerialUSB port to connect. Needed for native USB port only
 
-  SerialUSB.print("Initializing SD card...");
-
+		SerialUSB.print("Initializing SD card...");
+	#endif
+	
   if (!SD.begin(sd_select)) {
-    SerialUSB.println("initialization failed!");
+		#ifdef SER_DEBUG
+			SerialUSB.println("initialization failed!");
+		#endif
     return;
   }
-  SerialUSB.println("initialization done.");
-
+	#ifdef SER_DEBUG
+		SerialUSB.println("initialization done.");
+	#endif
   //completeFileName = String(fileName + "_" + String(millis()) + "." + fileExt);
   completeFileName = String(fileName + "." + fileExt);	//filename cannot be too long
 
 	//delete any pre-existing record
   if(SD.exists(completeFileName)){
-    SerialUSB.println("Found " + completeFileName +". Removing it.");
-    SD.remove(completeFileName);
+		#ifdef SER_DEBUG
+			SerialUSB.println("Found " + completeFileName +". Removing it.");
+    #endif
+		SD.remove(completeFileName);
   }
   //Create a new file
-  SerialUSB.println("Creating " + completeFileName + " ...");
-  if (packetLog = SD.open(completeFileName, FILE_WRITE)) {
-    SerialUSB.println(completeFileName + " created.");
-  }
+	#ifdef SER_DEBUG
+		SerialUSB.println("Creating " + completeFileName + " ...");
+  #endif
+	if (packetLog = SD.open(completeFileName, FILE_WRITE)) {
+		#ifdef SER_DEBUG
+			SerialUSB.println(completeFileName + " created.");
+		#endif
+	}
   else {	//die
-    SerialUSB.println("Failed to create " + completeFileName);
-    return;
+		#ifdef SER_DEBUG
+			SerialUSB.println("Failed to create " + completeFileName);
+    #endif
+		return;
   }
   packetLog.close();
 
   for (int i = 0; i < sizeof(data) / sizeof(data[0]); i++) {
-    SerialUSB.println("Iteration " + String(i));
-    //open file in append mode.
+		#ifdef SER_DEBUG
+			SerialUSB.println("Iteration " + String(i));
+    #endif
+		//open file in append mode.
     if (packetLog = SD.open(completeFileName, FILE_WRITE)) {
-      SerialUSB.println("\t" + completeFileName + " opened.");
-    }
+			#ifdef SER_DEBUG
+				SerialUSB.println("\t" + completeFileName + " opened.");
+			#endif
+		}
     else {	//die
-      SerialUSB.println("\t Failed to open " + completeFileName);
-      return;
+			#ifdef SER_DEBUG
+				SerialUSB.println("\t Failed to open " + completeFileName);
+      #endif
+			return;
     }
 
     //write a data string to the file
     packetLog.println(data[i]);
-    SerialUSB.println("\t Printed the line: " + data[i]);
-
+		#ifdef SER_DEBUG
+			SerialUSB.println("\t Printed the line: " + data[i]);
+		#endif
     packetLog.close();
   }
-  SerialUSB.println("Done.");
+	#ifdef SER_DEBUG
+		SerialUSB.println("Done.");
+	#endif
 }
 
 void loop() {
