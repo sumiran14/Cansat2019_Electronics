@@ -42,7 +42,11 @@ void setup() {
   //completeFileName = String(fileName + "_" + String(millis()) + "." + fileExt);
   completeFileName = String(fileName + "." + fileExt);	//filename cannot be too long
 
-	
+	//delete any pre-existing record
+  if(SD.exists(completeFileName)){
+    SerialUSB.println("Found " + completeFileName +". Removing it.");
+    SD.remove(completeFileName);
+  }
   //Create a new file
   SerialUSB.println("Creating " + completeFileName + " ...");
   if (packetLog = SD.open(completeFileName, FILE_WRITE)) {
@@ -96,6 +100,3 @@ void loop() {
 
   packetLog.close();
 }
-
-
-
