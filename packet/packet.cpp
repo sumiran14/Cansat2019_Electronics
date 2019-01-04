@@ -10,7 +10,7 @@ packet::packet(const int team_id){
 	this->pressure;
 	this->temperature;
 	this->voltage;
-	this->gps_time;
+	this->gps_time_utc;
 	this->gps_lattitude;
 	this->gps_longitude;
 	this->gps_altitude;
@@ -31,7 +31,7 @@ String packet::toString(){
 		String(this->pressure) + "," +
 		String(this->temperature) + "," +
 		String(this->voltage) + "," +
-		String(this->gps_time) + "," +
+		gps_tims_utc + "," +
 		String(this->gps_lattitude) + "," +
 		String(this->gps_longitude) + "," +
 		String(this->gps_altitude) + "," +
