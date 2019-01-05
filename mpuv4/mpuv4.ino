@@ -3,6 +3,7 @@
 //Roll along Xaxis 
 // Pitch along Y axis
 #include <Wire.h>                   //Including Library for I2C
+#include "wiring_private.h"
 
 int16_t accelX, accelY, accelZ;     //Since int in SAMD is 4 bytes, therefore using int16_t to make it SAMD compatible
 float gForceX, gForceY, gForceZ;    //stores acceleration in 3 directions in terms ofg
@@ -21,23 +22,31 @@ float Xgyr[10],Ygyr[10],Zgyr[10];
 
 #define MPU9250ADDRESS 0b1101001        // I2C address: 0x69 when AD0 pin is high
 #define Serial SerialUSB                // for SAMD
-#define Wire Wire1                      // for SAMD custom Wire
+//#define myWire myWire                     // for SAMD custom myWire
 
-TwoWire Wire1(&sercom2, 4, 3); //SDA = 4, SCL = 3
+TwoWire myWire(&sercom2, 4, 3); //SDA = 4, SCL = 3
 
 void setup() {
   Serial.begin(9600);
+  while (!Serial);
+  Serial.println("InSETUP");
+//  pinPeripheral(4, PIO_SERCOM_ALT);
+//  pinPeripheral(3, PIO_SERCOM_ALT);
+  
+  myWire.begin();
+  Serial.println("After myWire.begin");
 
   pinPeripheral(4, PIO_SERCOM_ALT);
   pinPeripheral(3, PIO_SERCOM_ALT);
   
-  Wire.begin();
-  Wire.setClock(400000);
+  myWire.setClock(400000);
+  Serial.println("After myWire.setclock");
   setupMPU();
 }
 
 
 void loop() {
+//  Serial.println("In Loop");
   recordAccelRegisters();
   recordGyroRegisters();
   printData();
@@ -51,29 +60,34 @@ void loop() {
  */
 
 void setupMPU(){
-  Wire.beginTransmission(MPU9250ADDRESS); //This is the I2C address of the MPU (b1101000/b1101001 for AC0 low/high datasheet sec. 9.2)
-  Wire.write(0x6B); //Accessing the register 6B - Power Management (Sec. 4.28)
-  Wire.write(0b00000000); //Setting SLEEP register to 0. (Required; see Note on p. 9)
-  Wire.endTransmission();  
-  Wire.beginTransmission(MPU9250ADDRESS); //I2C address of the MPU
-  Wire.write(0x1B); //Accessing the register 1B - Gyroscope Configuration (Sec. 4.4) 
-  Wire.write(0x00000000); //Setting the gyro to full scale +/- 250deg./s 
-  Wire.endTransmission(); 
-  Wire.beginTransmission(MPU9250ADDRESS); //I2C address of the MPU
-  Wire.write(0x1C); //Accessing the register 1C - Acccelerometer Configuration (Sec. 4.5) 
-  Wire.write(0b00000000); //Setting the accel to +/- 2g
-  Wire.endTransmission(); 
+  Serial.println("In SetUpMPU");
+  myWire.beginTransmission(MPU9250ADDRESS); //This is the I2C address of the MPU (b1101000/b1101001 for AC0 low/high datasheet sec. 9.2)
+  myWire.write(0x6B); //Accessing the register 6B - Power Management (Sec. 4.28)
+  myWire.write(0b00000000); //Setting SLEEP register to 0. (Required; see Note on p. 9)
+  myWire.endTransmission(); 
+   
+  myWire.beginTransmission(MPU9250ADDRESS); //I2C address of the MPU
+  myWire.write(0x1B); //Accessing the register 1B - Gyroscope Configuration (Sec. 4.4) 
+  myWire.write(0x00000000); //Setting the gyro to full scale +/- 250deg./s 
+  myWire.endTransmission();
+   
+  myWire.beginTransmission(MPU9250ADDRESS); //I2C address of the MPU
+  myWire.write(0x1C); //Accessing the register 1C - Acccelerometer Configuration (Sec. 4.5) 
+  myWire.write(0b00000000); //Setting the accel to +/- 2g
+  myWire.endTransmission(); 
+
+  Serial.println("SetUpMPU finished");    
 }
 
 void recordAccelRegisters() {
-  Wire.beginTransmission(MPU9250ADDRESS); //I2C address of the MPU
-  Wire.write(0x3B); //Starting register for Accel Readings
-  Wire.endTransmission();
-  Wire.requestFrom(MPU9250ADDRESS,6); //Request Accel Registers (3B - 40)
-  while(Wire.available() < 6);
-  accelX = Wire.read()<<8|Wire.read(); //Store first two bytes into accelX
-  accelY = Wire.read()<<8|Wire.read(); //Store middle two bytes into accelY
-  accelZ = Wire.read()<<8|Wire.read(); //Store last two bytes into accelZ
+  myWire.beginTransmission(MPU9250ADDRESS); //I2C address of the MPU
+  myWire.write(0x3B); //Starting register for Accel Readings
+  myWire.endTransmission();
+  myWire.requestFrom(MPU9250ADDRESS,6); //Request Accel Registers (3B - 40)
+  while(myWire.available() < 6);
+  accelX = myWire.read()<<8|myWire.read(); //Store first two bytes into accelX
+  accelY = myWire.read()<<8|myWire.read(); //Store middle two bytes into accelY
+  accelZ = myWire.read()<<8|myWire.read(); //Store last two bytes into accelZ
   processAccelData();
 }
 
@@ -90,14 +104,14 @@ gForceZNormalised = gForceZ/sqrt(gForceY*gForceY+gForceX*gForceX+gForceZ*gForceZ
 }
 
 void recordGyroRegisters() {
-  Wire.beginTransmission(MPU9250ADDRESS); //I2C address of the MPU
-  Wire.write(0x43); //Starting register for Gyro Readings
-  Wire.endTransmission();
-  Wire.requestFrom(MPU9250ADDRESS,6); //Request Gyro Registers (43 - 48)
-  while(Wire.available() < 6);
-  gyroX = Wire.read()<<8|Wire.read(); //Store first two bytes into accelX
-  gyroY = Wire.read()<<8|Wire.read(); //Store middle two bytes into accelY
-  gyroZ = Wire.read()<<8|Wire.read(); //Store last two bytes into accelZ
+  myWire.beginTransmission(MPU9250ADDRESS); //I2C address of the MPU
+  myWire.write(0x43); //Starting register for Gyro Readings
+  myWire.endTransmission();
+  myWire.requestFrom(MPU9250ADDRESS,6); //Request Gyro Registers (43 - 48)
+  while(myWire.available() < 6);
+  gyroX = myWire.read()<<8|myWire.read(); //Store first two bytes into accelX
+  gyroY = myWire.read()<<8|myWire.read(); //Store middle two bytes into accelY
+  gyroZ = myWire.read()<<8|myWire.read(); //Store last two bytes into accelZ
   processGyroData();
 }
 
