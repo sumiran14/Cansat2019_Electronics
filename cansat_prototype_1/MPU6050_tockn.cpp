@@ -2,6 +2,7 @@
 #include "Arduino.h"
 
 #define Serial SerialUSB
+#define SER_DEBUG
 
 MPU6050::MPU6050(TwoWire &w){
 	wire = &w;
@@ -52,21 +53,21 @@ void MPU6050::setGyroOffsets(float x, float y, float z){
 	gyroZoffset = z;
 }
 
-void MPU6050::calcGyroOffsets(bool console){
+void MPU6050::calcGyroOffsets(){
 	float x = 0, y = 0, z = 0;
 	int16_t rx, ry, rz;
 
   delay(1000);
-	if(console){
+	#ifdef SER_DEBUG
     Serial.println();
     Serial.println("========================================");
 		Serial.println("calculate gyro offsets");
 		Serial.print("DO NOT MOVE THE MPU6050");
-	}
+	#endif
 	for(int i = 0; i < 3000; i++){
-		if(console && i % 1000 == 0){
-			Serial.print(".");
-		}
+//		if(console && i % 1000 == 0){
+//			Serial.print(".");
+//		}
 		wire->beginTransmission(MPU6050_ADDR);
 		wire->write(0x3B);
 		wire->endTransmission(false);
@@ -88,16 +89,16 @@ void MPU6050::calcGyroOffsets(bool console){
 	gyroYoffset = y / 3000;
 	gyroZoffset = z / 3000;
 
-	if(console){
+	#ifdef SER_DEBUG
     Serial.println();
 		Serial.println("Done!!!");
 		Serial.print("X : ");Serial.println(gyroXoffset);
 		Serial.print("Y : ");Serial.println(gyroYoffset);
 		Serial.print("Z : ");Serial.println(gyroZoffset);
 		Serial.println("Program will start after 3 seconds");
-    Serial.print("========================================");
+    Serial.println("========================================");
 		delay(3000);
-	}
+	#endif
 }
 
 void MPU6050::update(){

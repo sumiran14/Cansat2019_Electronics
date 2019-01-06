@@ -28,7 +28,7 @@ void initSD(){
 		Serial.println("initialization done.");
 	#endif
 	
-	packetLog		= newFile(packetFileName, packetFileExt);
+	packetFile		= newFile(packetFileName, packetFileExt);
 	missionLog	= newFile(missionFileName, missionFileExt); 
 	
 }
@@ -80,18 +80,19 @@ boolean safe_print(File* file_ptr, const String text){
 		Ensures no two files are opened at the same time, and data is saved to SD card
 		Doesn't implement file locking, or stop interrupts.
 	*/
-  //open file in read mode.
-  if (!SD.open(file_ptr->name(), FILE_WRITE)) {
+	File temp;
+  //open file in write mode.
+  if (!(temp = SD.open(file_ptr->name(), FILE_WRITE))) {
 		#ifdef SER_DEBUG		//die
 			Serial.println("\t Failed to open " + String(file_ptr->name()));
 		#endif
     return false;
   }
-	file_ptr->print(text);
+	temp.print(text);
 	#ifdef SER_DEBUG
 		Serial.println("\t Printed the line: " + text);
 	#endif
-  file_ptr->close();	
+  temp.close();	
 	return true;
 }
 
@@ -111,6 +112,7 @@ boolean safe_println(const String filename, const String text){
 
 void readFile(File* file_ptr){
 	
+	File temp;
 	String completeFileName = String(file_ptr->name());
 	//Check if the file eists
 	if(!SD.exists(completeFileName)){
@@ -121,10 +123,12 @@ void readFile(File* file_ptr){
 	}
 	
   //open file in read mode.
-  if (SD.open(completeFileName, FILE_READ)) {
-		uint32_t size =  file_ptr->size();
+  if (temp = SD.open(completeFileName, FILE_READ)) {
+		uint32_t size = temp.size();
 		#ifdef SER_DEBUG
-			Serial.println(completeFileName + "\t Size: " + String(size) + " Bytes");
+			Serial.println("------------------------------------------------------");
+			Serial.println("File:\t" + completeFileName + "\t\tSize: " + String(size) + " Bytes");
+			Serial.println("------------------------------------------------------");
 		#endif
   }
   else {	//die
@@ -134,13 +138,15 @@ void readFile(File* file_ptr){
     return;
   }
 
-  while (file_ptr->available()) {
+  while (temp.available()) {
 		#ifdef SER_DEBUG
-			Serial.write(file_ptr->read());
+			Serial.write(temp.read());
 		#endif
   }
-	
-  file_ptr->close();	
+	#ifdef SER_DEBUG
+		Serial.println("------------------------------------------------------");
+	#endif
+  temp.close();	
 }
 
 void readFile(const String filename){

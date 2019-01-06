@@ -6,6 +6,7 @@
 
 #include "Adafruit_BMP280.h"
 #include "MPU6050_tockn.h"
+#include "packet.h"
 
 #define UART0_RX 0	//defined by default //Serial1
 #define UART0_TX 1
@@ -22,11 +23,11 @@
 
 #define voltagePin A3
 #define SD_SELECT 10
-//MPU AD0 --> GND
 
 #define Serial SerialUSB
-#define gps Serial1
+#define gps_uart Serial1
 #define zigbee Serial2
 
 #define LOG_MISSION	//enable this to log mission events to SD card
 #define SER_DEBUG		//enable this to get debug info in serial monitor
+#define TEAM_ID 1516		//BAGS
