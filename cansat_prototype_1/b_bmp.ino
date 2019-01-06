@@ -1,10 +1,9 @@
 void initBmp(){
-  Serial.println(F("BMP280 test"));
-
   if (!bmp.begin()) {
-    Serial.println(F("Could not find a valid BMP280 sensor, check wiring!"));
-  }
-
+		#ifdef SER_DEBUG
+			Serial.println(F("Could not find a valid BMP280 sensor, check wiring!"));
+		#endif
+	}
   /* Default settings from datasheet. */
   bmp.setSampling(Adafruit_BMP280::MODE_NORMAL,     /* Operating Mode. */
                   Adafruit_BMP280::SAMPLING_X2,     /* Temp. oversampling */

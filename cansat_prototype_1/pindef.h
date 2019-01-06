@@ -1,6 +1,7 @@
 #include <Arduino.h>   // required before wiring_private.h
 #include <Wire.h>
 #include <SPI.h>
+#include <SD.h>
 #include "wiring_private.h" // pinPeripheral() function
 
 #include "Adafruit_BMP280.h"
@@ -20,7 +21,11 @@
 #define SCK  13
 
 #define voltagePin A3
+#define SD_SELECT 10
 
 #define Serial SerialUSB
 #define gps Serial1
 #define zigbee Serial2
+
+#define LOG_MISSION	//enable this to log mission events to SD card
+#define SER_DEBUG		//enable this to get debug info in serial monitor
