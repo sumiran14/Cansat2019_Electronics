@@ -34,13 +34,13 @@ void setup() {
 //  pinPeripheral(3, PIO_SERCOM_ALT);
   
   myWire.begin();
-  Serial.println("After myWire.begin");
+//  Serial.println("After myWire.begin");
 
   pinPeripheral(4, PIO_SERCOM_ALT);
   pinPeripheral(3, PIO_SERCOM_ALT);
   
   myWire.setClock(400000);
-  Serial.println("After myWire.setclock");
+//  Serial.println("After myWire.setclock");
   setupMPU();
 }
 
@@ -76,7 +76,7 @@ void setupMPU(){
   myWire.write(0b00000000); //Setting the accel to +/- 2g
   myWire.endTransmission(); 
 
-  Serial.println("SetUpMPU finished");    
+//  Serial.println("SetUpMPU finished");    
 }
 
 void recordAccelRegisters() {
