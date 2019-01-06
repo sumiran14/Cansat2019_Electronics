@@ -8,6 +8,7 @@ TwoWire Wire1(&sercom2, SDA, SCL);
 
 Adafruit_BMP280 bmp;
 MPU6050 mpu6050(Wire1);
+RTCZero rtc;
 packet dataPacket(TEAM_ID);
 
 File packetFile;		//file handle for packet.csv
@@ -24,30 +25,32 @@ void setup(){
   zigbee.begin(9600);
   Wire1.begin();
 
-  initSerial();	
+  initSerial();
+	rtc.begin();
   initBatteryVoltage();
 	initBmp();
 	initSD();
 	mpu6050.begin();
-  mpu6050.calcGyroOffsets();
 	
+	resetMissionTime();			//Do this when prompted by ground station
+  mpu6050.calcGyroOffsets();
+  
 	readFile("packet.csv");
 	#ifdef LOG_MISSION
 		logEvent("Altitude reset to 0.");
-		delay(100);
+		delay(2000);
 		logEvent("Taking Off");
-		delay(100);
+		delay(5000);
+		logEvent("Couldn't find bmp.");
 	#endif
 	readFile(&missionLog);
-	
-	//while(1);
 
 	int i = 0;
 	while(i<10){
 		mpu6050.update();
 		if(millis() - timer > 1000 ){
 			i++;
-			dataPacket.mission_time = millis();
+			dataPacket.mission_time = getMissionTime();
 			dataPacket.packet_count = i;
 			dataPacket.altitude = bmp.readAltitude(1013.25);
 			dataPacket.pressure = bmp.readPressure();

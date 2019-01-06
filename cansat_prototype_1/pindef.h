@@ -2,8 +2,9 @@
 #include <Wire.h>
 #include <SPI.h>
 #include <SD.h>
-#include "wiring_private.h" // pinPeripheral() function
+#include <RTCZero.h>
 
+#include "wiring_private.h" // pinPeripheral() function
 #include "Adafruit_BMP280.h"
 #include "MPU6050_tockn.h"
 #include "packet.h"

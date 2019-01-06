@@ -157,5 +157,5 @@ void readFile(const String filename){
 
 //to be updated with time from RTC
 String getTimeStamp(){
-	return timeStamp;
+	return getRTCDateTime();
 }
