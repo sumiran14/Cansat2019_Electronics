@@ -22,6 +22,7 @@
 
 #define voltagePin A3
 #define SD_SELECT 10
+//MPU AD0 --> GND
 
 #define Serial SerialUSB
 #define gps Serial1
