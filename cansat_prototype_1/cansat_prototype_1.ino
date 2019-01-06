@@ -8,10 +8,13 @@ SPIClass SPI1(&sercom1, MISO, SCK, MOSI, SPI_PAD_0_SCK_1, SERCOM_RX_PAD_3);
 Adafruit_BMP280 bmp;
 MPU6050 mpu6050(Wire1);
 
+File packetLog;		//file handle for packet.csv
+File missionLog;	//file handle for missin.log
+
 long timer = 0;
 
 void setup(){
-  SerialUSB.begin(115200);
+  Serial.begin(115200);
   while(!Serial);
   gps.begin(9600);
   zigbee.begin(9600);
@@ -21,6 +24,19 @@ void setup(){
   initBatteryVoltage();
 	initBmp();
 	mpu6050.begin();
+	initSD();
+	
+	//readFile("packet.csv");
+	#ifdef LOG_MISSION
+		logEvent("Altitude reset to 0.");
+		delay(100);
+		logEvent("Taking Off");
+		delay(100);
+	#endif
+	
+	readFile(&missionLog);
+	
+	//while(1);
   
   mpu6050.calcGyroOffsets(true);
 }
