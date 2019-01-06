@@ -4,11 +4,11 @@
 #define VCC 3.3 //Max voltage read by SAMD21
 #define VOLTAGE_DIV (R1+R2)/R2 //Factor for calculating battery voltage
 
-int voltagePin=A0;
 
-void initBatteryVoltage() {     
+void initBatteryVoltage() {
   // initialize battery voltage function
   pinMode(voltagePin,INPUT);
+  analogReadResolution(12); // Set analog input resolution to max, 12-bits
 }
 
 float getBatteryVoltage() {
