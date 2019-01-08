@@ -4,11 +4,14 @@ void initXBee(){
 }
 
 void onRecieveData(){
-  int i = zigbee.parseInt();
+  int i = zigbee.read();
+  while(zigbee.available()){
+    zigbee.read();
+  }
   switch(i){
-    case 0://do this
+    case '0'://do this
            break;
-    case 1: //do that        
+    case '1': //do that        
             break;
      //and so on
   }
