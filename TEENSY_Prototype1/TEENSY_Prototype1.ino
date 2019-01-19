@@ -8,8 +8,11 @@ packet dataPacket(TEAM_ID);
 Adafruit_BMP280 bmp;    //BMP object: I2C interface //Used "Wire"
 RTC_DS3231 rtc;         //RTC object: I2C interface //Used "Wire"
 MPU6050 mpu6050(Wire);  //MPU6050 object
-
 long timer = 0;
+
+//File Objects for SDCARD
+File packetFile;    //file handle for packet.csv
+File missionLog;  //file handle for missin.log
 
 void setup() {
   //Opening SErial Monitor
@@ -25,6 +28,8 @@ void setup() {
   mpu6050.calcGyroOffsets(true);
   //UART Devices Initialization===============================
   xbee.begin(9600);       //XBEE initializing
+  
+  initSD();
 } 
 
 void loop() {
@@ -41,6 +46,7 @@ void loop() {
     dataPacket.roll  = mpu6050.getAngleY();
 
     //Sending data via xbee
+    savePacket(&dataPacket);
     transmitPacketString(&dataPacket);
       
     Serial.print(String(dataPacket.mission_time)+"\t"+String(dataPacket.altitude)+"\t"+String(dataPacket.pressure)+"\t"+String(dataPacket.temperature));
