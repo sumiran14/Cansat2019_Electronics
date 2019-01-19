@@ -10,7 +10,7 @@ Adafruit_BMP280 bmp;    //BMP object: I2C interface //Used "Wire"
 RTC_DS3231 rtc;         //RTC object: I2C interface //Used "Wire"
 MPU6050 mpu6050(Wire);  //MPU6050 object
 long timer = 0;
-
+volatile unsigned long countStartTime = 0;
 //File Objects for SDCARD
 File packetFile;    //file handle for packet.csv
 File missionLog;  //file handle for missin.log
@@ -58,7 +58,10 @@ void loop() {
     dataPacket.roll  = mpu6050.getAngleY();
     //VOLTAGE
     dataPacket.voltage = getBatteryVoltage();
-
+    dataPacket.blade_spin_rate = giveRPM(countStartTime);
+    makeCountZero();
+    countStartTime = millis()/1000;
+  
     dataPacket.display();
     //Sending data via xbee
     savePacket(&dataPacket);
