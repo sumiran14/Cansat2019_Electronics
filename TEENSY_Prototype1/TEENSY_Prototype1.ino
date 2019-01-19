@@ -3,6 +3,7 @@
 #include "pindef.h"
 
 packet dataPacket(TEAM_ID); 
+uint64_t packetCount = 0;
 
 //I2C Objects Initialization=================================
 Adafruit_BMP280 bmp;    //BMP object: I2C interface //Used "Wire"
@@ -26,15 +27,26 @@ void setup() {
   resetMissionTime();   //To initialize the startTime variable
   mpu6050.begin();      //MPU
   mpu6050.calcGyroOffsets(true);
+  
   //UART Devices Initialization===============================
   xbee.begin(9600);       //XBEE initializing
+  //GPS LEFT
   
+  //SPI Devices Initialization=====================================
   initSD();
+
+  //Battery Voltage:
+  initBatteryVoltage();
 } 
 
+
 void loop() {
+  
   mpu6050.update();
   if(millis()-timer > 1000){
+    packetCount++;
+    //PACKET_COUNT
+    dataPacket.packet_count = packetCount;
     //BMP=========================================================
     dataPacket.altitude = bmp.readAltitude(1013.25);
     dataPacket.pressure = bmp.readPressure();
@@ -44,13 +56,16 @@ void loop() {
     //MPU=========================================================
     dataPacket.pitch = mpu6050.getAngleX();
     dataPacket.roll  = mpu6050.getAngleY();
+    //VOLTAGE
+    dataPacket.voltage = getBatteryVoltage();
 
+    dataPacket.display();
     //Sending data via xbee
     savePacket(&dataPacket);
     transmitPacketString(&dataPacket);
       
-    Serial.print(String(dataPacket.mission_time)+"\t"+String(dataPacket.altitude)+"\t"+String(dataPacket.pressure)+"\t"+String(dataPacket.temperature));
-    Serial.println("\t"+String(dataPacket.pitch)+"\t"+String(dataPacket.roll));
+//    Serial.print(String(dataPacket.mission_time)+"\t"+String(dataPacket.altitude)+"\t"+String(dataPacket.pressure)+"\t"+String(dataPacket.temperature));
+//    Serial.println("\t"+String(dataPacket.pitch)+"\t"+String(dataPacket.roll));
     
     timer = millis();
   }

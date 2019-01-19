@@ -15,6 +15,8 @@
 #define xbee Serial1
 #define SD_SELECT 10
 
+#define NUMBEROFMAGNETS 1           //Number of magnets on fan 
+
 #define LOG_MISSION	//enable this to log mission events to SD card
 #define SER_DEBUG		//enable this to get debug info in serial monitor
 #define TEAM_ID 3279		//TEAM KALAM
