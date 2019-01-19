@@ -12,7 +12,7 @@
 #define voltagePin A8
 
 #define gps_uart Serial2
-#define zigbee Serial1
+#define xbee Serial1
 #define SD_SELECT 10
 
 #define LOG_MISSION	//enable this to log mission events to SD card

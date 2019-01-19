@@ -1,3 +1,5 @@
+//IMPORTANT : MPU toc library change address to 0x69
+            //AD0 pin high
 #include "pindef.h"
 
 packet dataPacket(TEAM_ID); 
@@ -21,6 +23,8 @@ void setup() {
   resetMissionTime();   //To initialize the startTime variable
   mpu6050.begin();      //MPU
   mpu6050.calcGyroOffsets(true);
+  //UART Devices Initialization===============================
+  xbee.begin(9600);       //XBEE initializing
 } 
 
 void loop() {
@@ -35,6 +39,9 @@ void loop() {
     //MPU=========================================================
     dataPacket.pitch = mpu6050.getAngleX();
     dataPacket.roll  = mpu6050.getAngleY();
+
+    //Sending data via xbee
+    transmitPacketString(&dataPacket);
       
     Serial.print(String(dataPacket.mission_time)+"\t"+String(dataPacket.altitude)+"\t"+String(dataPacket.pressure)+"\t"+String(dataPacket.temperature));
     Serial.println("\t"+String(dataPacket.pitch)+"\t"+String(dataPacket.roll));
