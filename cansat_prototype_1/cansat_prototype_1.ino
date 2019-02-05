@@ -57,9 +57,12 @@ void setup(){
 			dataPacket.temperature = bmp.readTemperature();
 			dataPacket.voltage = getBatteryVoltage();
 			
-			dataPacket.pitch = mpu6050.getAngleX();
-			dataPacket.roll  = mpu6050.getAngleY();
+			double xval = mpu6050.getAngleX();
+			double yval  = mpu6050.getAngleY();
+			double zval  = mpu6050.getAngleZ();
 			
+			dataPacket.roll = atan(yval / xval);
+			dataPacket.pitch = atan(-xval/(sqrt(pow(yval, 2) + pow(zval, 2))));
 			dataPacket.software_state = idle;
 			
 			dataPacket.display();
