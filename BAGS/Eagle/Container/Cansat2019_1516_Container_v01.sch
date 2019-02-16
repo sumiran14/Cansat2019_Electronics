@@ -16823,14 +16823,10 @@ I2C</description>
 <wire x1="37" y1="0" x2="37" y2="-16" width="0.127" layer="21"/>
 <wire x1="37" y1="-16" x2="0" y2="-16" width="0.127" layer="21"/>
 <wire x1="0" y1="-16" x2="0" y2="0" width="0.127" layer="21"/>
-<rectangle x1="0" y1="-6" x2="7" y2="-3" layer="17"/>
-<pad name="VOUT+" x="3.5" y="-4.5" drill="2" diameter="3" shape="square"/>
-<rectangle x1="30" y1="-6" x2="37" y2="-3" layer="17"/>
-<pad name="VIN+" x="33.5" y="-4.5" drill="2" diameter="3" shape="square"/>
-<rectangle x1="30" y1="-13" x2="37" y2="-10" layer="17"/>
-<pad name="VIN-" x="33.5" y="-11.5" drill="2" diameter="3" shape="square"/>
-<rectangle x1="0" y1="-13" x2="7" y2="-10" layer="17"/>
-<pad name="VOUT-" x="3.5" y="-11.5" drill="2" diameter="3" shape="square"/>
+<pad name="VOUT+" x="3.5" y="-4.5" drill="2" diameter="3" shape="long"/>
+<pad name="VIN+" x="33.5" y="-4.5" drill="2" diameter="3" shape="long"/>
+<pad name="VIN-" x="33.5" y="-11.5" drill="2" diameter="3" shape="long"/>
+<pad name="VOUT-" x="3.5" y="-11.5" drill="2" diameter="3" shape="long"/>
 <text x="32" y="-2" size="1.27" layer="25">VIN+</text>
 <text x="32" y="-15" size="1.27" layer="25">VIN-</text>
 <text x="1" y="-15" size="1.27" layer="25">VOUT-</text>
@@ -16994,7 +16990,14 @@ Get the latest version from &lt;a href="https://github.com/IndianTinker/CEDT-Eag
 <variantdefs>
 </variantdefs>
 <classes>
-<class number="0" name="default" width="0" drill="0">
+<class number="0" name="default" width="0.3048" drill="0">
+<clearance class="0" value="0.3048"/>
+</class>
+<class number="1" name="power" width="0.6096" drill="0">
+<clearance class="1" value="0.3048"/>
+</class>
+<class number="2" name="burner" width="0.8128" drill="0">
+<clearance class="2" value="0.3048"/>
 </class>
 </classes>
 <parts>
@@ -17041,12 +17044,13 @@ Get the latest version from &lt;a href="https://github.com/IndianTinker/CEDT-Eag
 <part name="C7" library="rcl" deviceset="C-EU" device="025-025X050" value="0.1u"/>
 <part name="R7" library="rcl" deviceset="R-EU_" device="0204/7" value="1k"/>
 <part name="NICH_LED" library="01_adafruit" deviceset="LED" device="3MM"/>
-<part name="U$1" library="Breakouts" deviceset="MT3608_BOB" device=""/>
+<part name="MT3608" library="Breakouts" deviceset="MT3608_BOB" device=""/>
 <part name="GND8" library="MSP PROJECT LIBRARY" deviceset="GND" device=""/>
 <part name="P+8" library="supply1" deviceset="+12V" device=""/>
 <part name="PWR" library="SparkFun-Connectors" deviceset="M04X2" device=""/>
 <part name="BAT_CON" library="CEDT_JANUARY_2015_v5" deviceset="M02" device=""/>
 <part name="GND9" library="MSP PROJECT LIBRARY" deviceset="GND" device=""/>
+<part name="SWITCH" library="CEDT_JANUARY_2015_v5" deviceset="M02" device=""/>
 </parts>
 <sheets>
 <sheet>
@@ -17123,17 +17127,18 @@ Mechanism
 <instance part="C7" gate="G$1" x="104.14" y="-71.12"/>
 <instance part="R7" gate="G$1" x="210.82" y="27.94" rot="R180"/>
 <instance part="NICH_LED" gate="G$1" x="223.52" y="27.94" rot="R90"/>
-<instance part="U$1" gate="G$1" x="55.88" y="5.08"/>
+<instance part="MT3608" gate="G$1" x="55.88" y="5.08"/>
 <instance part="GND8" gate="1" x="68.58" y="-20.32"/>
 <instance part="P+8" gate="1" x="96.52" y="7.62"/>
 <instance part="PWR" gate="G$1" x="17.78" y="-5.08"/>
-<instance part="BAT_CON" gate="G$1" x="12.7" y="48.26" rot="MR180"/>
+<instance part="BAT_CON" gate="G$1" x="12.7" y="40.64" rot="MR180"/>
 <instance part="GND9" gate="1" x="27.94" y="-15.24"/>
+<instance part="SWITCH" gate="G$1" x="12.7" y="53.34" rot="MR180"/>
 </instances>
 <busses>
 </busses>
 <nets>
-<net name="VBAT" class="0">
+<net name="VBAT" class="2">
 <segment>
 <pinref part="IC1" gate="G$1" pin="VIN"/>
 <wire x1="48.26" y1="55.88" x2="43.18" y2="55.88" width="0.1524" layer="91"/>
@@ -17146,9 +17151,9 @@ Mechanism
 <wire x1="43.18" y1="53.34" x2="43.18" y2="55.88" width="0.1524" layer="91"/>
 <junction x="43.18" y="55.88"/>
 <label x="35.56" y="58.42" size="1.778" layer="95"/>
-<pinref part="BAT_CON" gate="G$1" pin="1"/>
-<wire x1="20.32" y1="48.26" x2="22.86" y2="48.26" width="0.1524" layer="91"/>
-<wire x1="22.86" y1="48.26" x2="22.86" y2="55.88" width="0.1524" layer="91"/>
+<pinref part="SWITCH" gate="G$1" pin="1"/>
+<wire x1="20.32" y1="53.34" x2="22.86" y2="53.34" width="0.1524" layer="91"/>
+<wire x1="22.86" y1="53.34" x2="22.86" y2="55.88" width="0.1524" layer="91"/>
 </segment>
 <segment>
 <wire x1="231.14" y1="63.5" x2="223.52" y2="63.5" width="0.1524" layer="91"/>
@@ -17157,7 +17162,7 @@ Mechanism
 <wire x1="231.14" y1="63.5" x2="231.14" y2="55.88" width="0.1524" layer="91"/>
 </segment>
 <segment>
-<pinref part="U$1" gate="G$1" pin="VIN+"/>
+<pinref part="MT3608" gate="G$1" pin="VIN+"/>
 <wire x1="50.8" y1="0" x2="33.02" y2="0" width="0.1524" layer="91"/>
 <label x="33.02" y="0" size="1.778" layer="95"/>
 </segment>
@@ -17180,7 +17185,7 @@ Mechanism
 <label x="7.62" y="7.62" size="1.778" layer="95"/>
 </segment>
 </net>
-<net name="VCC" class="0">
+<net name="VCC" class="1">
 <segment>
 <pinref part="IC1" gate="G$1" pin="VOUT"/>
 <wire x1="68.58" y1="55.88" x2="76.2" y2="55.88" width="0.1524" layer="91"/>
@@ -17236,7 +17241,7 @@ Mechanism
 <junction x="86.36" y="-50.8"/>
 </segment>
 </net>
-<net name="GND" class="0">
+<net name="GND" class="1">
 <segment>
 <pinref part="GND1" gate="1" pin="GND"/>
 <wire x1="58.42" y1="35.56" x2="58.42" y2="38.1" width="0.1524" layer="91"/>
@@ -17261,9 +17266,7 @@ Mechanism
 <pinref part="IC1" gate="G$1" pin="GND"/>
 <wire x1="58.42" y1="45.72" x2="58.42" y2="38.1" width="0.1524" layer="91"/>
 <pinref part="BAT_CON" gate="G$1" pin="2"/>
-<wire x1="20.32" y1="45.72" x2="22.86" y2="45.72" width="0.1524" layer="91"/>
-<wire x1="22.86" y1="45.72" x2="22.86" y2="38.1" width="0.1524" layer="91"/>
-<wire x1="22.86" y1="38.1" x2="35.56" y2="38.1" width="0.1524" layer="91"/>
+<wire x1="20.32" y1="38.1" x2="35.56" y2="38.1" width="0.1524" layer="91"/>
 <junction x="35.56" y="38.1"/>
 </segment>
 <segment>
@@ -17344,13 +17347,13 @@ Mechanism
 <wire x1="104.14" y1="-78.74" x2="104.14" y2="-76.2" width="0.1524" layer="91"/>
 </segment>
 <segment>
-<pinref part="U$1" gate="G$1" pin="VIN-"/>
+<pinref part="MT3608" gate="G$1" pin="VIN-"/>
 <wire x1="50.8" y1="-7.62" x2="48.26" y2="-7.62" width="0.1524" layer="91"/>
 <wire x1="48.26" y1="-7.62" x2="48.26" y2="-15.24" width="0.1524" layer="91"/>
 <wire x1="48.26" y1="-15.24" x2="68.58" y2="-15.24" width="0.1524" layer="91"/>
 <wire x1="68.58" y1="-15.24" x2="88.9" y2="-15.24" width="0.1524" layer="91"/>
 <wire x1="88.9" y1="-15.24" x2="88.9" y2="-7.62" width="0.1524" layer="91"/>
-<pinref part="U$1" gate="G$1" pin="VOUT-"/>
+<pinref part="MT3608" gate="G$1" pin="VOUT-"/>
 <wire x1="88.9" y1="-7.62" x2="86.36" y2="-7.62" width="0.1524" layer="91"/>
 <pinref part="GND8" gate="1" pin="GND"/>
 <wire x1="68.58" y1="-17.78" x2="68.58" y2="-15.24" width="0.1524" layer="91"/>
@@ -17383,20 +17386,20 @@ Mechanism
 <wire x1="99.06" y1="38.1" x2="99.06" y2="43.18" width="0.1524" layer="91"/>
 </segment>
 </net>
-<net name="+12V" class="0">
+<net name="+12V" class="1">
 <segment>
 <pinref part="P+2" gate="1" pin="+12V"/>
 <pinref part="SG1" gate="G$1" pin="+"/>
 <wire x1="149.86" y1="66.04" x2="149.86" y2="63.5" width="0.1524" layer="91"/>
 </segment>
 <segment>
-<pinref part="U$1" gate="G$1" pin="VOUT+"/>
+<pinref part="MT3608" gate="G$1" pin="VOUT+"/>
 <wire x1="86.36" y1="0" x2="96.52" y2="0" width="0.1524" layer="91"/>
 <pinref part="P+8" gate="1" pin="+12V"/>
 <wire x1="96.52" y1="5.08" x2="96.52" y2="0" width="0.1524" layer="91"/>
 </segment>
 </net>
-<net name="N$1" class="0">
+<net name="N$1" class="1">
 <segment>
 <pinref part="SG1" gate="G$1" pin="-"/>
 <pinref part="Q1" gate="G$1" pin="D"/>
@@ -17480,7 +17483,7 @@ Mechanism
 <label x="200.66" y="-71.12" size="1.778" layer="95"/>
 </segment>
 </net>
-<net name="MCU_VCC" class="0">
+<net name="MCU_VCC" class="1">
 <segment>
 <pinref part="U1" gate="G$1" pin="VCC"/>
 <pinref part="C5" gate="G$1" pin="1"/>
@@ -17497,7 +17500,7 @@ Mechanism
 <label x="177.8" y="-66.04" size="1.778" layer="95"/>
 </segment>
 </net>
-<net name="VPROG" class="0">
+<net name="VPROG" class="1">
 <segment>
 <pinref part="PROG/DEPL" gate="G$1" pin="1"/>
 <wire x1="185.42" y1="-35.56" x2="187.96" y2="-35.56" width="0.1524" layer="91"/>
@@ -17510,7 +17513,7 @@ Mechanism
 <label x="236.22" y="-66.04" size="1.778" layer="95"/>
 </segment>
 </net>
-<net name="N$2" class="0">
+<net name="N$2" class="2">
 <segment>
 <pinref part="NICHROME_WIRE" gate="-2" pin="KL"/>
 <pinref part="Q2" gate="1" pin="C"/>
@@ -17621,6 +17624,15 @@ Mechanism
 <pinref part="R7" gate="G$1" pin="1"/>
 <pinref part="NICH_LED" gate="G$1" pin="A"/>
 <wire x1="220.98" y1="27.94" x2="215.9" y2="27.94" width="0.1524" layer="91"/>
+</segment>
+</net>
+<net name="N$6" class="2">
+<segment>
+<pinref part="SWITCH" gate="G$1" pin="2"/>
+<wire x1="20.32" y1="50.8" x2="22.86" y2="50.8" width="0.1524" layer="91"/>
+<wire x1="22.86" y1="50.8" x2="22.86" y2="40.64" width="0.1524" layer="91"/>
+<pinref part="BAT_CON" gate="G$1" pin="1"/>
+<wire x1="22.86" y1="40.64" x2="20.32" y2="40.64" width="0.1524" layer="91"/>
 </segment>
 </net>
 </nets>
