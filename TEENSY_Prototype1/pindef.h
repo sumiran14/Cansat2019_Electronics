@@ -16,7 +16,7 @@
 #define SD_SELECT 10
 
 #define NUMBEROFMAGNETS 1           //Number of magnets on fan 
-#define HALLPIN 23
+#define HALLPIN 3
 
 #define LOG_MISSION	//enable this to log mission events to SD card
 #define SER_DEBUG		//enable this to get debug info in serial monitor
