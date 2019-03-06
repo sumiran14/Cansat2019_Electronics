@@ -30,6 +30,7 @@ void setup() {
   
   //UART Devices Initialization===============================
   xbee.begin(9600);       //XBEE initializing
+  initXBee();
   //GPS LEFT
   
   //SPI Devices Initialization=====================================

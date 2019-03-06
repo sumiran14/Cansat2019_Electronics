@@ -12,7 +12,10 @@
 #define voltagePin A8
 
 #define gps_uart Serial2
+
 #define xbee Serial1
+#define XBEE_INTERRUPT_PIN 2
+
 #define SD_SELECT 10
 
 #define NUMBEROFMAGNETS 1           //Number of magnets on fan 

@@ -20,7 +20,7 @@ void initSD(){
   if (!SD.begin(SD_SELECT)) {
     Serial.println("initialization failed!");
     // don't do anything more:
-    while (1);
+//    while (1);
   }
 
   Serial.println("initialization done.");
